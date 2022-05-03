@@ -1,24 +1,11 @@
-# README
+# Build an aid platform for your neighborhood
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Help those in need by building a platform that links people needing help with volunteers in the vicinity.
+You'll create the back-end and front-end yourself, use an external maps API for localization, 
+and make sure the whole thing looks great on mobile.
 
-Things you may want to cover:
+### Skills acquired in this project
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Design wireframes for web or mobile
+Create a Rails app
+Deploy Rails apps

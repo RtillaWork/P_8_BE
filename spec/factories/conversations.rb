@@ -4,6 +4,6 @@ FactoryBot.define do
     # task { nil }
     task { FactoryBot.build(:task) }
     # user { nil }
-    user { FactoryBot.build(:user)}
+    user { FactoryBot.build(:user) }
   end
 end

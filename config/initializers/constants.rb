@@ -17,10 +17,10 @@ module Project8Constants
   # Task/Request related
   MAX_ACTIVE_CONVERSATIONS_PER_TASK = 5
   LOCK_COUNT = MAX_ACTIVE_CONVERSATIONS_PER_TASK
-  REPUBLISHING_WAITING_PERIOD =  24.hours # 24.seconds # 24.hours
+  REPUBLISHING_WAITING_PERIOD = 24.hours # 24.seconds # 24.hours
   UNPUBLISH_AFTER_CREATE_DELAY = 24.hours # 180.seconds # 24 hours
-  ONE_TIME_TASK = 'OTT'   #'one_time_task' # 1
-  MATERIAL_NEED = 'MN'    #'material need' # 2
+  ONE_TIME_TASK = 'OTT' #'one_time_task' # 1
+  MATERIAL_NEED = 'MN' #'material need' # 2
   # Conversation/offer of help related
   USER_ROLE_AS_VOLUNTEER = 'VOLUNTEER'
   USER_ROLE_AS_REQUESTOR = 'REQUESTOR'

@@ -51,63 +51,64 @@ class MessagesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_message
-      @message = Message.find(params[:id])
-    end
 
-    def set_message_context
-      @conversation = if params[:conversation_id].present? then 
-      Conversation.find_by(id: params[:conversation_id].to_i)
-      else
-        nil
-      end
-      @task = if @conversation.present? then
-        @conversation.task
-      else 
-        nil 
-      end
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_message
+    @message = Message.find(params[:id])
+  end
 
-    def is_current_user_a_party
-      # PRIVACY: conversation must related to current_user...
-      # ...either as a volunteer Conversation.user_id or...
-      # ... as a requestor Conversation.task.user_id.
-      if @task.present? && @conversation.present? then
-        return (@conversation.user_id == current_user.id) || (@task.user_id == current_user.id)
-      else
-        false
-      end
-    end
+  def set_message_context
+    @conversation = if params[:conversation_id].present? then
+                      Conversation.find_by(id: params[:conversation_id].to_i)
+                    else
+                      nil
+                    end
+    @task = if @conversation.present? then
+              @conversation.task
+            else
+              nil
+            end
+  end
 
-    def message_params_as_current_user
-      if is_current_user_a_party
-        message_params.merge(user_id: current_user.id)
-      else 
-        nil
-      end
+  def is_current_user_a_party
+    # PRIVACY: conversation must related to current_user...
+    # ...either as a volunteer Conversation.user_id or...
+    # ... as a requestor Conversation.task.user_id.
+    if @task.present? && @conversation.present? then
+      return (@conversation.user_id == current_user.id) || (@task.user_id == current_user.id)
+    else
+      false
     end
+  end
 
-    def params_conversation_id 
-      if params[:conversation_id].present? then 
-        params[:conversation_id].to_i
-      else
-        nil
-      end
+  def message_params_as_current_user
+    if is_current_user_a_party
+      message_params.merge(user_id: current_user.id)
+    else
+      nil
     end
-    # Only allow a list of trusted parameters through.
-    def message_params
-      # p=params.require(:message).permit(:text, :conversation_id, :user_id)
-      params.require(:message).permit(:text, :conversation_id)
-    end
+  end
 
-
-    def set_messages_of_conversation
-      @messages = Message.find(Conversation: params[:conversation_id])
+  def params_conversation_id
+    if params[:conversation_id].present? then
+      params[:conversation_id].to_i
+    else
+      nil
     end
+  end
 
-    def set_messages_of_user
-      @message = Message.find(User: params[:user_id])
-    end
+  # Only allow a list of trusted parameters through.
+  def message_params
+    # p=params.require(:message).permit(:text, :conversation_id, :user_id)
+    params.require(:message).permit(:text, :conversation_id)
+  end
+
+  def set_messages_of_conversation
+    @messages = Message.find(Conversation: params[:conversation_id])
+  end
+
+  def set_messages_of_user
+    @message = Message.find(User: params[:user_id])
+  end
 
 end

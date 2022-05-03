@@ -1,4 +1,3 @@
-
 json.partial! "conversations/conversation", conversation: @conversation
 
 json.role @user_role
@@ -23,9 +22,9 @@ end
 json.messages do
   if @conversation.messages.present?
     json.most_recent json.partial! "messages/message", message: @conversation.messages.last
-  # json.most_recent_sent_at @conversation.messages.last.created_at
+    # json.most_recent_sent_at @conversation.messages.last.created_at
   else
     json.null!
-  end  
+  end
 end
 # json.url conversation_url(@conversation, format: :json)

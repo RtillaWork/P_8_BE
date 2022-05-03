@@ -4,31 +4,29 @@ class Message < ApplicationRecord
   belongs_to :conversation
   belongs_to :user
   # belongs_to :task, through: :conversation
-# end
+  # end
 
-validates :text, presence: true, length: {in: 1..MESSAGE_MAX_SIZE, message: "Message shoud be less than #{MESSAGE_MAX_SIZE} characters and cannot be empty"}
+  validates :text, presence: true, length: { in: 1..MESSAGE_MAX_SIZE, message: "Message shoud be less than #{MESSAGE_MAX_SIZE} characters and cannot be empty" }
 
-attribute :interlocutor
+  attribute :interlocutor
 
-after_initialize do |message|
-  # self.locutor = message.user
-  locutor = message.user
-  requestor = message.conversation.task.user
-  volunteer = message.conversation.user
-  message.interlocutor =  if locutor == volunteer 
-    requestor
-    else 
-      volunteer 
-    end
+  after_initialize do |message|
+    # self.locutor = message.user
+    locutor = message.user
+    requestor = message.conversation.task.user
+    volunteer = message.conversation.user
+    message.interlocutor = if locutor == volunteer
+                             requestor
+                           else
+                             volunteer
+                           end
+  end
+
+  after_save do |message|
+    message.conversation.touch
+  end
+
 end
-
-after_save do |message|
-  message.conversation.touch
-end
-
-
-end
-
 
 # TODO after migration add logic for last_seen_at
 
@@ -51,7 +49,6 @@ end
 # The message interlocutor is the other user i.e is message_volunteer if != message_locutor or message_requestor if != message_locutor
 # message validate that it can only be created/updated by a requestor or a volunteer or by MRBOT system user (user 0)...
 # ... i.e message.user_id must belong to [volunteer.id, requestor.id, MRBOT.id]
-
 
 # a message can only be (listed/indexed?? TODO NOTE) created/updated if message_conversation.is_active = true
 

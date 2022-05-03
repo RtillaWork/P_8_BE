@@ -26,7 +26,11 @@ for i in 1..NUMBER_OF_USERS
   email = "s#{i}@m.co"
   first_name = Faker::Name.first_name
   last_name = Faker::Name.last_name
-  preferred_name =  if (rand(0..100) < 30) then Faker::Name.first_name_neutral else first_name end
+  preferred_name = if (rand(0..100) < 30) then
+                     Faker::Name.first_name_neutral
+                   else
+                     first_name
+                   end
   address = Faker::Address.street_address
   avatar = Faker::Avatar.image
   default_lat = rand(-24.1000000..-23.4000000) #rand(-24.8000000..-23.2000000) #base_lat + rand(-requestor.id..requestor.id)/1_000 + rand(-10_000..10_000)/100_000
@@ -36,38 +40,50 @@ for i in 1..NUMBER_OF_USERS
   password = "zzzzzz"
   password_confirmation = "zzzzzz"
 
-     User.create!(email: email, 
-              first_name: first_name, 
-              last_name: last_name, 
-              preferred_name: preferred_name,
-              address: address,
-              avatar: avatar,
-              default_lat: default_lat,
-              default_lng: default_lng,
-              last_loggedin: last_loggedin,
-              last_active: Time.now,
-              password: password, password_confirmation: password_confirmation)
-  
+  User.create!(email: email,
+               first_name: first_name,
+               last_name: last_name,
+               preferred_name: preferred_name,
+               address: address,
+               avatar: avatar,
+               default_lat: default_lat,
+               default_lng: default_lng,
+               last_loggedin: last_loggedin,
+               last_active: Time.now,
+               password: password, password_confirmation: password_confirmation)
+
   p User.all.count
 end
-
-
 
 # Create tasks for and by the_current_user, the requestor role
 MAX_TASKS_PER_REQUESTOR = 30
 users_all = User.all.shuffle
 # users_all = User.all
 users_all.each do |requestor|
-  if (requestor.id.nil?) then next end
+  if (requestor.id.nil?) then
+    next
+  end
   requestor.update(last_loggedin: Time.now)
   tasks_for_requestor = rand(0..MAX_TASKS_PER_REQUESTOR)
   for i in 1..tasks_for_requestor
-    kind = if (rand(1..100).odd? ) then ONE_TIME_TASK else MATERIAL_NEED end 
-    is_fullfilled = if (rand(0..100).odd? ) then true else false end 
-      # if (is_published && (i+rand(2) < max_number_of_tasks_per_user)) then false else !is_published end
-    is_published =  if is_fullfilled then false else true  end
-      # if (i+rand(3) < max_number_of_tasks_per_user ) then true else false end 
-     
+    kind = if (rand(1..100).odd?) then
+             ONE_TIME_TASK
+           else
+             MATERIAL_NEED
+           end
+    is_fullfilled = if (rand(0..100).odd?) then
+                      true
+                    else
+                      false
+                    end
+    # if (is_published && (i+rand(2) < max_number_of_tasks_per_user)) then false else !is_published end
+    is_published = if is_fullfilled then
+                     false
+                   else
+                     true
+                   end
+    # if (i+rand(3) < max_number_of_tasks_per_user ) then true else false end
+
     title = "Title by requestor #{requestor.preferred_name} #{requestor.id}: Can you please help with #{kind}"
     description = "Description: #{Faker::Lorem.paragraphs.join}"
     lat = requestor.default_lat + rand(-0.01..0.01) #rand(-1.000001..1.000001)/100 
@@ -83,13 +99,12 @@ users_all.each do |requestor|
     puts lat
     puts lng
 
-    requestor.tasks.create!({ title: title,description: description,kind: kind, unpublished_at: !is_published ? Time.current : nil,
-      is_published: is_published,is_fullfilled: is_fullfilled,lat: lat, lng: lng})
-    requestor.update(last_active:  Time.now)
+    requestor.tasks.create!({ title: title, description: description, kind: kind, unpublished_at: !is_published ? Time.current : nil,
+                              is_published: is_published, is_fullfilled: is_fullfilled, lat: lat, lng: lng })
+    requestor.update(last_active: Time.now)
   end
   p Task.all.count
 end
-
 
 # # the_current_user initates a conversation around a selected task as a  volunteer
 # MAX_CONVERSATIONS_PER_VOLUNTEER = 20
@@ -111,7 +126,7 @@ end
 #       # aka skip if task.user_id == the_current_user.id ||
 #       # task.conversation.is_active == false ||
 #       # task.conversation.users > 5
-        
+
 #       if (volunteer == requestor ) || (!conversation.nil? && !conversation.is_active) || (!conversation.nil? && conversation.is_active && conversations_for_task.count > 5)
 #       then 
 #         task.is_published = false  # touch that task and hide it
@@ -135,7 +150,6 @@ end
 #     end
 #   end
 # end
-
 
 # # Generate messages
 # MAX_MESSAGES_PER_CONVERSATIONS = 8
@@ -165,21 +179,16 @@ end
 # end   
 # end 
 
-
 # the_current_user initated conversations around selected tasks as a  volunteer
 # generate messages about the conversation
-
-
 
 # Task.all.shuffle.each do |task|
 #   max_conversations_per_task = rand(0..6)
 #   users_replied_to_task = User.all.shuffle.take(max_conversations_per_task)
 #   users_replied_to_task.each do |user|
-    
+
 #   end
-    
-  
-  
+
 #   User.
 #     kind = if (rand(i*10..max_number_of_tasks_per_user*10+1).odd? ) then 'one_time_task' else 'material_need' end 
 #     is_published =  if (i+rand(3) < max_number_of_tasks_per_user ) then true else false end 
