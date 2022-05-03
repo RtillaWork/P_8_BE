@@ -10,11 +10,10 @@ class DirectUploadsController < ActiveStorage::DirectUploadsController
   end
 
   def direct_upload_as_json(blob)
-    blob.as_json(root: false, methods: :signed_id).merge(service_url: url_for(blob)).merge(direct_upload:
-                                                                                             {
-                                                                                               url: blob.service_url_for_direct_upload,
-                                                                                               headers: blob.service_headers_for_direct_upload
-                                                                                             })
+    blob.as_json(root: false, methods: :signed_id)
+        .merge(service_url: url_for(blob))
+        .merge(direct_upload:
+                 { url: blob.service_url_for_direct_upload,  headers: blob.service_headers_for_direct_upload })
   end
 
 end

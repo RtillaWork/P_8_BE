@@ -41,14 +41,9 @@ class Task < ApplicationRecord
 
   after_find :set_delayed_unfullfilled_unpublished_state
 
-  # validate :cannot_have_more_active_conversations_than_max_per_task, unless: :active_conversations_count.blank?, on: :update
   validate :cannot_have_more_active_conversations_than_max_per_task #, on: [:update, :save]
   validate :cannot_be_updated_after_fullfilled #, on: [:update, :save]
-  # validate :cannot_be_published_after_fullfilled #, on: [:update, :save]
-  # validate :cannot_be_published_if_is_fullfilling, unless: :active_conversations_count.blank?, on: [:update, :save]
-  # validate :cannot_be_published_if_is_fullfilling, unless: :authz_volunteer_ids.blank?, on: [:update, :save]
-  # - validate :cannot_be_republished_before_the_waiting_period, on: [:update, :save] 
-  # validate :cannot_mark_fullfilled_unless_authz_user_or_owner, on: :update # NOTE belongs to the controller
+
   # TODO: validate  task.unpublished_at > task.updated_at || task.unpublished_at is NULL 
 
   scope :published, -> { where(is_published: true) }
@@ -114,9 +109,7 @@ class Task < ApplicationRecord
   def set_is_republishable_flag
     if !self.is_published && self.unpublished_at.present? && (Time.current - self.unpublished_at) > REPUBLISHING_WAITING_PERIOD
       self.is_republishable = true
-      # self.unpublished_at = null not necessary
-      # self.touch
-      # self.save
+
     else
       self.is_republishable = false
     end
@@ -152,10 +145,6 @@ class Task < ApplicationRecord
   end
 
   def set_delayed_unfullfilled_unpublished_state
-    # puts "DEBUG DEBUG DEBUG SET DELAYED UNFULLFILLED UNPUBLISHED STATE"
-    # puts (Time.current - self.created_at.to_i) # > UNPUBLISH_AFTER_CREATE_DELAY
-    #     puts "DEBUG DEBUG DEBUG SET DELAYED UNFULLFILLED UNPUBLISHED STATE"
-    # if self.is_published && Math.abs(Time.current - self.created_at) > UNPUBLISH_AFTER_CREATE_DELAY
     if self.is_published && !self.is_fullfilling && (Time.current - self.created_at) > UNPUBLISH_AFTER_CREATE_DELAY
       self.created_at = Time.current
       self.updated_at = Time.current + 1

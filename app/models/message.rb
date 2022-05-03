@@ -4,7 +4,6 @@ class Message < ApplicationRecord
   belongs_to :conversation
   belongs_to :user
   # belongs_to :task, through: :conversation
-  # end
 
   validates :text, presence: true, length: { in: 1..MESSAGE_MAX_SIZE, message: "Message shoud be less than #{MESSAGE_MAX_SIZE} characters and cannot be empty" }
 

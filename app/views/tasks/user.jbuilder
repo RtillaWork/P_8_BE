@@ -9,7 +9,6 @@ json.array! @tasks do |task|
   json.active_conversation_ids task.active_conversation_ids
 
   # if task.authz_volunteer_ids.count > 1 then
-
   #   json.array! task.conversations do |conversation|
   #   end
   # else

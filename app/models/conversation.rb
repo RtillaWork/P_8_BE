@@ -14,7 +14,6 @@ class Conversation < ApplicationRecord
   validate :conversation_can_only_be_started_for_published_task, on: :create
   validate :conversation_can_only_be_started_for_unfullfilled_task, on: :create
   validate :user_can_create_only_one_conversation_per_task, on: :create
-  # validate :authz_users_and_owner_only_can_update_a_conversation_about_associated_task, on: [:update]
 
   before_create :ensure_sane_defaults
   before_save :ensure_is_not_active_is_final

@@ -12,12 +12,11 @@ class TasksController < ApplicationController
     # ...i.e does not include the case where both change at the same time for the same operation
 
     # all the open created tasks after our timestamp
-    @created = Task.all.open.where.not(user: current_user).where("created_at >= ?", since).within_radius_by_distance
+    @created = Task.all.open.where.not(user: current_user).where("created_at >= ?", since)
+                   .within_radius_by_distance
     # all the tasks updated since this timestamp including 
-    @updated = Task.all.where.not(user: current_user).where("updated_at >= ? AND updated_at > created_at", since).within_radius_by_distance
-    # @query_radius = Current.radius
-    # @query_lat = Current.lat
-    # @query_lng = Current.lng
+    @updated = Task.all.where.not(user: current_user).where("updated_at >= ? AND updated_at > created_at", since)
+                   .within_radius_by_distance
     @query_since = since
   end
 
@@ -35,7 +34,6 @@ class TasksController < ApplicationController
   # GET /tasks/user.json
   def user
     # return current_user's all tasks
-    # @tasks = Task.all.where(user: current_user).by_default_distance
     @tasks = Task.all.where(user: current_user).order('updated_at asc') #.by_distance
   end
 
@@ -46,12 +44,12 @@ class TasksController < ApplicationController
     # ...i.e does not include the case where both change at the same time for teh same operation
 
     # all the open created tasks after our timestamp
-    @created = Task.all.open.where.not(user: current_user).where("created_at >= ?", since).within_radius_by_distance
+    @created = Task.all.open.where.not(user: current_user).where("created_at >= ?", since)
+                   .within_radius_by_distance
     # all the tasks updated since this timestamp including 
-    @updated = Task.all.where.not(user: current_user).where("updated_at >= ?", since).within_radius_by_distance
-    # @query_radius = Current.radius
-    # @query_lat = Current.lat
-    # @query_lng = Current.lng
+    @updated = Task.all.where.not(user: current_user).where("updated_at >= ?", since)
+                   .within_radius_by_distance
+
     @query_since = since
   end
 
@@ -71,8 +69,6 @@ class TasksController < ApplicationController
     @open_profile_task_count = Task.all.open.where(user: current_user).count
 
     @last_created_task = Task.all.order("created_at asc").last || Task.none
-    # last_created_at = @last_created_task.created_at
-    # @last_updated_task = Task.all.where('updated_at <> ? AND updated_at > created_at', last_created_at).order("updated_at asc").last
     @last_updated_task = Task.all.where('updated_at > created_at').order("updated_at asc").last || Task.none
 
   end
@@ -82,15 +78,12 @@ class TasksController < ApplicationController
   def show
     if @task.user_id == current_user.id then
       @current_user_role = USER_ROLE_AS_REQUESTOR
-      # @current_conversation = nil # Conversation.none
       @current_conversation_id = nil # Conversation.none
     elsif @task.authz_volunteer_ids.include?(current_user.id) then
       @current_user_role = USER_ROLE_AS_VOLUNTEER
-      # @current_conversation = current_user.conversations.find_by(task: @task)
       @current_conversation_id = current_user.conversations.find_by(task: @task).id
     else
       @current_user_role = USER_ROLE_AS_OTHER
-      # @current_conversation = nil # Conversation.none
       @current_conversation_id = nil # Conversation.none
     end
   end

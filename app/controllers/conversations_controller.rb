@@ -28,15 +28,8 @@ class ConversationsController < ApplicationController
 
   # GET /conversations/dump
   def dump
-    # @conversations = Conversation.all
-    # @conversations = current_user.conversations
-    # @requestors = @conversations.task.user
-    # @conversations_as_volunteer = current_user.conversations.map{|c| c.presence.to_h.merge({user_role: USER_AS_VOLUNTEER})}
     @conversations_as_volunteer = current_user.conversations
-    # @conversations_as_requestor = Conversation.find_by(task_id: current_user.task_ids).map{|c| c.merge({user_role: USER_AS_REQUESTOR})}
     @conversations_as_requestor = Conversation.where(task_id: current_user.task_ids)
-    # @conversations_as_requestor = Array.wrap(Conversation.find_by(task: current_user.tasks))
-    # @conversations = @conversations_as_volunteer.concat(@conversations_as_requestor)
     @user_role_as_volunteer = USER_ROLE_AS_VOLUNTEER
     @user_role_as_requestor = USER_ROLE_AS_REQUESTOR
     @user_role_as_undefined = USER_ROLE_AS_UNDEFINED

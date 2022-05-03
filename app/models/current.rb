@@ -24,28 +24,19 @@ class Current < ActiveSupport::CurrentAttributes
 
   def set_user=(u)
     self.user = u
-    # puts self.user.inspect
   end
 
   def default_coords=(user)
     # super
     self.default_lat = user.default_lat.to_f
     self.default_lng = user.default_lng.to_f
-
     # NOTE default_lat/lng must be required an have at least a default and valid value
     self.lat = self.default_lat
     self.lng = self.default_lng
     self.default_radius = MAX_RADIUS
     # self.radius = MAX_RADIUS
 
-    # puts "BEGIN DEBUG default_coords=(user)"
-    # puts self.default_lat
-    # puts self.default_lng
-    # puts self.radius
-    # puts "Current.lat/lng"
-    # puts self.lat
-    # puts self.lng
-    # puts "END DEBUG default_coords=(user)"
+
 
   end
 
@@ -53,27 +44,16 @@ class Current < ActiveSupport::CurrentAttributes
     if coords.present? then
       self.params_lat = coords[:lat].to_f
       self.params_lng = coords[:lng].to_f
-
       # if coords exist and are valid, ...
       # ... Current lat/lng gets assigned these values instead of user defaults/lat/lng
       self.lat = self.params_lat
       self.lng = self.params_lng
 
-      # puts "BEGIN DEBUG params_coords=(params)"
-      # puts self.params_lat
-      # puts self.params_lng
-      # puts "Current.lat/lng"
-      # puts self.lat
-      # puts self.lng
-      # puts "END DEBUG params_coords=(params)"
+
     else
       self.params_lat = APP_DEFAULT_LAT
       self.params_lng = APP_DEFAULT_LNG
 
-      # puts "BEGIN DEBUG params_coords=(params) APP_DEFAULT"
-      # puts self.params_lat
-      # puts self.params_lng
-      # puts "END DEBUG params_coords=(params) APP_DEFAULT"
     end
   end
 
@@ -83,13 +63,9 @@ class Current < ActiveSupport::CurrentAttributes
       self.params_radius = r
       # self.radius = r
 
-      # puts "DEBUG radius=(params)"
-      # puts self.params_radius
     else
       self.params_radius = MAX_RADIUS
 
-      # puts "DEBUG radius=(params) INFINITY RADIUS"
-      # puts self.params_radius
     end
   end
 

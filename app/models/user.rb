@@ -30,9 +30,7 @@ class User < ActiveRecord::Base
 
   after_initialize do |u|
     Current.default_coords = u
-    # Current.set_user = u
-    # puts u.default_lng
-    # puts u.default_lng
+
   end
 
   # Add gov_id_document file uploads valiations
@@ -48,10 +46,5 @@ class User < ActiveRecord::Base
     end
   end
 
-  # def signup_activation?
-  #   # self.email.present? && self.first_name.present? && self.last_name.present? && self.default_lat.present? && self.default_lng.present? && self.updated_at > self.created_at
-  #   # checks if a User record has already been created during the first LoginSignup screen
-  #   updated_at.present? && created_at.present? # && updated_at > created_at
-  # end
 
 end
