@@ -19,7 +19,7 @@ gem 'bcrypt', '~> 3.1.7'
 # devise > 4.7.3  raises deprecation errors
 gem 'devise', '4.7.3'
 # for Rails 6.0 can't be < 1.1.2
-gem 'devise_token_auth', '1.1.2'
+gem 'devise_token_auth', '1.1.3'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
